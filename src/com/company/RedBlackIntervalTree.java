@@ -3,9 +3,13 @@ package com.company;
 /**
  * Created by leeco on 17/6/30.
  */
-public class RedBlackSegmentTree {
+public class RedBlackIntervalTree {
 
     protected Node root;
+
+    public void insert(int min, int max) {
+        insert(Int.of(min, max));
+    }
 
     public void insert(Int t) {
         Node tNode = new Node();
@@ -191,6 +195,31 @@ public class RedBlackSegmentTree {
             }
         }
         root.color = Color.Black;
+    }
+
+    public int overlap(int i) {
+        return overlap(i, root);
+    }
+
+    public static int overlap(int i, Node node) {
+        Node current = node;
+
+        int count = 0;
+
+        if (current.interval.contain(i)) {
+            count++;
+        }
+
+        if (current.left != null && i >= current.interval.minOfChild && i < current.left.interval.maxOfChild) {
+            count += overlap(i, current.left);
+        }
+
+        if (i > current.interval.min && current.right != null && i >= current.right.interval.minOfChild && i < current.right.interval.maxOfChild) {
+            count += overlap(i, current.right);
+        }
+
+
+        return count;
     }
 
 
